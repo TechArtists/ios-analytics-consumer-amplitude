@@ -1,0 +1,33 @@
+{
+  "originHash" : "911eb9d3aa866751b229e99bf0c488432017d55ae25e9875effc9e6ba6c30055",
+  "pins" : [
+    {
+      "identity" : "amplitude-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/amplitude/Amplitude-Swift.git",
+      "state" : {
+        "revision" : "ce41c105bf9f0a1518f8bd6e594177c69512f054",
+        "version" : "1.9.2"
+      }
+    },
+    {
+      "identity" : "analytics-connector-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/amplitude/analytics-connector-ios.git",
+      "state" : {
+        "revision" : "e2ca17ac735bcbc48b13062484541702ef45153d",
+        "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "taanalytics",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:TechArtists/TAAnalytics.git",
+      "state" : {
+        "revision" : "a344af269d4b111fabd4d0de8914965458ee4df4",
+        "version" : "1.0.2"
+      }
+    }
+  ],
+  "version" : 3
+}
