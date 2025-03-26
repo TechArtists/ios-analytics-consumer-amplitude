@@ -29,7 +29,7 @@ import PackageDescription
 
 let package = Package(
     name: "AmplitudeAnalyticsConsumerTests",
-    platforms: [.iOS(.v13), .macOS(.v10_13)],
+    platforms: [.iOS(.v15), .macOS(.v10_13)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -43,7 +43,7 @@ let package = Package(
         ),
         .package(
             url: "git@github.com:TechArtists/TAAnalytics.git",
-            from: "1.0.2"
+            from: "0.9.0"
         )
     ],
     targets: [

@@ -28,20 +28,20 @@ import AmplitudeSwift
 
 /// Sends messages to Amplitude about analytics events & user properties.
 public class AmplitudeAnalyticsConsumer: AnalyticsConsumer, AnalyticsConsumerWithReadWriteUserID {
-
-    public typealias T = AmplitudeAnalyticsConsumer
-
+    
     private let enabledInstallTypes: [TAAnalyticsConfig.InstallType]
-    let apiKey: String
-    var amplitude: Amplitude?
+    private let apiKey: String
+    private let isRedacted: Bool
+    private var amplitude: Amplitude?
 
     // MARK: AnalyticsConsumer
 
     /// - Parameters:
     ///   - isRedacted: If parameter & user property values should be redacted.
     ///   - enabledInstallTypes: Install types for which the consumer is enabled.
-    init(apiKey: String, enabledInstallTypes: [TAAnalyticsConfig.InstallType]) {
+    public init(apiKey: String, enabledInstallTypes: [TAAnalyticsConfig.InstallType] = TAAnalyticsConfig.InstallType.allCases, isRedacted: Bool = true) {
         self.enabledInstallTypes = enabledInstallTypes
+        self.isRedacted = isRedacted
         self.apiKey = apiKey
     }
 
@@ -60,8 +60,7 @@ public class AmplitudeAnalyticsConsumer: AnalyticsConsumer, AnalyticsConsumerWit
         ))
     }
 
-    public func track(trimmedEvent: TrimmedEvent, params: [String: AnalyticsBaseParameterValue]?) {
-        let event = trimmedEvent.event
+    public func track(trimmedEvent: EventAnalyticsModelTrimmed, params: [String: any AnalyticsBaseParameterValue]?) {
         
         var eventProperties = [String: Any]()
         if let params = params {
@@ -71,14 +70,14 @@ public class AmplitudeAnalyticsConsumer: AnalyticsConsumer, AnalyticsConsumerWit
         }
         
         let baseEvent = BaseEvent(
-          eventType: event.rawValue,
-          eventProperties: eventProperties
+            eventType: trimmedEvent.rawValue,
+            eventProperties: eventProperties
         )
         amplitude?.track(event: baseEvent)
     }
 
-    public func set(trimmedUserProperty: TrimmedUserProperty, to: String?) {
-        let userPropertyKey = trimmedUserProperty.userProperty.rawValue
+    public func set(trimmedUserProperty: UserPropertyAnalyticsModelTrimmed, to: String?) {
+        let userPropertyKey = trimmedUserProperty.rawValue
         
         var userProperties = [String: Any]()
         if let value = to {
@@ -91,31 +90,28 @@ public class AmplitudeAnalyticsConsumer: AnalyticsConsumer, AnalyticsConsumerWit
         amplitude?.identify(userProperties: userProperties)
     }
 
-    public func trim(event: AnalyticsEvent) -> TrimmedEvent {
-        // Amplitude doesn't have strict event name limits, but you can enforce one.
-        let trimmedEventName = event.rawValue.ob_trim(type: "event", toLength: 40)
-        return TrimmedEvent(trimmedEventName)
+    public func trim(event: EventAnalyticsModel) -> EventAnalyticsModelTrimmed {
+        EventAnalyticsModelTrimmed(event.rawValue.ta_trim(toLength: 240, debugType: "event"))
     }
 
-    public func trim(userProperty: AnalyticsUserProperty) -> TrimmedUserProperty {
-        // Amplitude doesn't have strict user property key limits, but you can enforce one.
-        let trimmedUserPropertyKey = userProperty.rawValue.ob_trim(type: "user property", toLength: 40)
-        return TrimmedUserProperty(trimmedUserPropertyKey)
+    public func trim(userProperty: UserPropertyAnalyticsModel) -> UserPropertyAnalyticsModelTrimmed {
+        UserPropertyAnalyticsModelTrimmed(userProperty.rawValue.ta_trim(toLength: 40, debugType: "user property"))
     }
 
-    public var wrappedValue: Self {
-        return self
+    public var wrappedValue: Amplitude {
+        guard let amplitude = amplitude else {
+            fatalError("Amplitude instance has not been initialized. Call startFor(...) before accessing wrappedValue.")
+        }
+        return amplitude
     }
 
     // MARK: AnalyticsConsumerWithWriteOnlyUserID
 
     public func set(userID: String?) {
-        if let userID = userID {
-            amplitude?.setUserId(userId: userID)
-        }
+        amplitude?.setUserId(userId: userID)
     }
     
     public func getUserID() -> String? {
-        return amplitude?.getUserId()
+        amplitude?.getUserId()
     }
 }

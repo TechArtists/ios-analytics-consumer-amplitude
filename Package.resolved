@@ -1,5 +1,5 @@
 {
-  "originHash" : "911eb9d3aa866751b229e99bf0c488432017d55ae25e9875effc9e6ba6c30055",
+  "originHash" : "f95e61044d3d8eb042b39c0072b4afca6f6ce8c7a32d3a16fe60921fd24e727a",
   "pins" : [
     {
       "identity" : "amplitude-swift",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:TechArtists/TAAnalytics.git",
       "state" : {
-        "revision" : "a344af269d4b111fabd4d0de8914965458ee4df4",
-        "version" : "1.0.2"
+        "revision" : "1409bc6ea7ae77cd82b949ae569e9c4b25fcfb7d",
+        "version" : "0.9.6"
       }
     }
   ],
