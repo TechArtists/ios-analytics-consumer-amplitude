@@ -27,14 +27,14 @@ import TAAnalytics
 import AmplitudeSwift
 
 /// Sends messages to Amplitude about analytics events & user properties.
-public class AmplitudeAnalyticsConsumer: AnalyticsConsumer, AnalyticsConsumerWithReadWriteUserID {
+public class AmplitudeAnalyticsAdaptor: AnalyticsAdaptor, AnalyticsAdaptorWithReadWriteUserID {
     
     private let enabledInstallTypes: [TAAnalyticsConfig.InstallType]
     private let apiKey: String
     private let isRedacted: Bool
     private var amplitude: Amplitude?
 
-    // MARK: AnalyticsConsumer
+    // MARK: AnalyticsAdaptor
 
     /// - Parameters:
     ///   - isRedacted: If parameter & user property values should be redacted.
@@ -105,7 +105,7 @@ public class AmplitudeAnalyticsConsumer: AnalyticsConsumer, AnalyticsConsumerWit
         return amplitude
     }
 
-    // MARK: AnalyticsConsumerWithWriteOnlyUserID
+    // MARK: AnalyticsAdaptorWithWriteOnlyUserID
 
     public func set(userID: String?) {
         amplitude?.setUserId(userId: userID)
